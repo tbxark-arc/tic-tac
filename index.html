@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三子棋游戏</title>
     <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
     <style>
         .square:hover {
@@ -22,41 +24,75 @@
         }
 
         @keyframes blink {
-            0% { opacity: 1.0; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1.0; }
+            0% {
+                opacity: 1.0;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1.0;
+            }
         }
     </style>
 </head>
+
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
     <div id="title" class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800">三子棋游戏</h1>
-        <p id="tips" class="text-lg text-gray-600 mt-6">每人最多只能下三颗棋子，当下第四颗棋子时，最先那一颗棋子会消失。</p>
+        <p id="tips" class="text-lg text-gray-600 mt-6">❌ 0 : 0 🟢</p>
     </div>
     <div id="board" class="grid grid-cols-3 gap-4">
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square0"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square1"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square2"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square3"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square4"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square5"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square6"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square7"></div>
-        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square8"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square0">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square1">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square2">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square3">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square4">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square5">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square6">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square7">
+        </div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square8">
+        </div>
     </div>
     <h2 id="message" class="text-2xl text-gray-700 mt-6"></h2>
     <div id="singleSection" class="mt-4" style="display: none;">
-        <input type="button" value="重新开始" id="restartButton" onclick="restartGame()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"/>
+        <input type="button" value="重新开始" id="restartButton" onclick="restartGame()"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700" />
     </div>
     <div id="connectSection" class="mb-4 mt-4" style="display: none;">
-        <input type="text" id="peerIdInput" placeholder="输入对方的联机码" class="px-4 py-2 border rounded">
-        <button id="connectButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700" disabled>连接中</button>
+        <input type="text" id="peerIdInput" placeholder="使用同一个联机码" class="px-4 py-2 border rounded">
+        <button id="connectButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            disabled>连接中</button>
     </div>
     <div id="gameMode" class="mt-4">
         <button id="singlePlayerButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">单机版</button>
         <button id="multiPlayerButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">联机版</button>
     </div>
     <p id="onlineCode" class="text-lg text-gray-600 mt-2"></p>
+    <a class="github-fork-ribbon" href="https://github.com/TBXark/tic-tac" data-ribbon="Fork me on GitHub"
+        title="Fork me on GitHub">Fork me on GitHub</a>
+    <div id="modal" class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg">
+            <h2 class="text-2xl text-gray-800">游戏规则</h2>
+            <p class="text-gray-600 mt-4">1. 每人最多只能下三颗棋子，当下第四颗棋子时，最先那一颗棋子会消失。</p>
+            <p class="text-gray-600 mt-4">2. 玩家可以选择单机版或联机版，联机版需要输入同一个联机码。</p>
+            <button id="closeModal" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 mt-4">知道了</button>
+        </div>
+    </div>
+    <footer class="text-center text-gray-600 mt-4 fixed bottom-0 w-full bg-white p-4">
+        <p>Made with ❤️ by <a href="https://github.com/TBXark" class="text-blue-500">TBXark</a></p>
+    </footer>
     <script src="game.js"></script>
 </body>
+
 </html>

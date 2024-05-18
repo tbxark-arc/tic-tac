@@ -54,7 +54,7 @@ for (let i = 0; i < squares.length; i++) {
             if (checkWin(currentPlayer)) {
                 endMessage.textContent = `${currentPlayer} 赢了!`;
                 score[currentPlayer] = score[currentPlayer] ? score[currentPlayer] + 1 : 1;
-                tips.textContent = `❌${score[players[0]]} : ${score[players[1]]} 🟢`;
+                tips.textContent = `❌ ${score[players[0]]} : ${score[players[1]]} 🟢`;
                 disableBoard();
             } else {
                 currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
@@ -100,6 +100,11 @@ function restartGame() {
     // 输的玩家先手
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
     endMessage.textContent = `${currentPlayer}的回合!`;
+    if (conn && conn.open) {
+        conn.send({
+            action: 'restart',
+        });
+    }
 }
 
 function genPeerId() {
@@ -107,7 +112,18 @@ function genPeerId() {
 }
 
 function startConnect() {
-    peer = new Peer(genPeerId());
+    peer = new Peer(genPeerId(), {
+        config: {
+            iceServers: [
+                // { urls: 'stun.qq.com:3478' },
+                { urls: 'stun:freestun.net:3479' },
+                { urls: 'stun:freestun.net:3479' },
+                { urls: 'stun:freestun.net:5350' },
+                { urls: 'turn:freestun.tel:3479', username: 'free', credential: 'free' },
+                { urls: 'turns:freestun.tel:5350', username: 'free', credential: 'free' }
+            ]
+        }
+    });
     peer.on('open', function (id) {
         document.getElementById('peerIdInput').value = id;
         connectButton.disabled = false;
@@ -131,6 +147,14 @@ function startConnect() {
 function setupConnectionHandlers(con) {
     con.on('data', function (data) {
         console.log('Received', data);
+        const { action } = data;
+        switch (action) {
+            case 'restart':
+                restartGame();
+                break;
+            default:
+                break;
+        }
         for (let i = 0; i < squares.length; i++) {
             squares[i].textContent = data.board[i];
         }
@@ -182,6 +206,10 @@ document.getElementById('singlePlayerButton').addEventListener('click', function
 document.getElementById('multiPlayerButton').addEventListener('click', function () {
     showConnectSection();
     startConnect();
+});
+
+document.getElementById('closeModal').addEventListener('click', function () {
+    document.getElementById('modal').style.display = 'none';
 });
 
 connectButton.addEventListener('click', function () {
