@@ -14,8 +14,7 @@ const playerStep = {
     [players[1]]: []
 }
 let currentPlayer = players[0];
-let selfPlayer = players[0];
-let firstInit = false;
+let selfPlayer = null;
 
 let peer = null;
 let conn = null;
@@ -34,12 +33,12 @@ const winningCombinations = [
 for (let i = 0; i < squares.length; i++) {
     squares[i].addEventListener('click', function () {
         if (squares[i].textContent === '') {
-            if (conn && conn.open) {
-                if (selfPlayer !== currentPlayer && !firstInit) {
-                    return;
-                }
+            if (selfPlayer === null) {
+                selfPlayer = currentPlayer;
             }
-            firstInit = false;
+            if (conn && conn.open && selfPlayer !== currentPlayer) {
+                return;
+            }
             squares[i].textContent = currentPlayer;
             playerStep[currentPlayer].push(i);
             if (playerStep[currentPlayer].length > 3) {
@@ -122,6 +121,10 @@ function startConnect() {
         conn = connection;
         setupConnectionHandlers(conn);
     });
+    // 错误处理
+    peer.on('error', function (err) {
+        console.log(err);
+    });
 }
 
 
@@ -131,13 +134,15 @@ function setupConnectionHandlers(con) {
         for (let i = 0; i < squares.length; i++) {
             squares[i].textContent = data.board[i];
         }
+        if (data.selfPlayer === null) {
+            selfPlayer = currentPlayer === players[0] ? players[1] : players[0];
+        }
         currentPlayer = data.currentPlayer;
         playerStep[players[0]] = data.playerStep[players[0]];
         playerStep[players[1]] = data.playerStep[players[1]];
         score[players[0]] = data.score[players[0]];
         score[players[1]] = data.score[players[1]];
         tips.textContent = `❌${score[players[0]]} : ${score[players[1]]} 🟢`;
-        selfPlayer = data.selfPlayer === players[0] ? players[1] : players[0];
         endMessage.textContent = `${currentPlayer}的回合!`;
     });
     showGameSection();
@@ -185,6 +190,9 @@ connectButton.addEventListener('click', function () {
     conn.on('open', function () {
         console.log('Connected to: ' + peerId);
         setupConnectionHandlers(conn);
+    });
+    conn.on('error', function (err) {
+        console.log(err);
     });
 });
 
