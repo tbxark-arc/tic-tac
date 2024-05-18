@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三子棋游戏</title>
     <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
     <style>
         .square:hover {
             background-color: #FFFFE0;
@@ -44,9 +45,18 @@
         <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square8"></div>
     </div>
     <h2 id="message" class="text-2xl text-gray-700 mt-6"></h2>
-    <div id="endGame" class="mt-4">
+    <div id="singleSection" class="mt-4" style="display: none;">
         <input type="button" value="重新开始" id="restartButton" onclick="restartGame()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"/>
     </div>
+    <div id="connectSection" class="mb-4 mt-4" style="display: none;">
+        <input type="text" id="peerIdInput" placeholder="输入对方的联机码" class="px-4 py-2 border rounded">
+        <button id="connectButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700" disabled>连接中</button>
+    </div>
+    <div id="gameMode" class="mt-4">
+        <button id="singlePlayerButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">单机版</button>
+        <button id="multiPlayerButton" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">联机版</button>
+    </div>
+    <p id="onlineCode" class="text-lg text-gray-600 mt-2"></p>
     <script src="game.js"></script>
 </body>
 </html>
