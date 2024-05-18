@@ -4,27 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三子棋游戏</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .square:hover {
+            background-color: #FFFFE0;
+            border: 2px solid #ff9d9d;
+        }
+
+        .next-remove {
+            animation: blink 1s infinite;
+        }
+
+        .win-square {
+            background-color: #FFD700;
+            border: 2px solid #FFD700;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1.0; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1.0; }
+        }
+    </style>
 </head>
-<body>
-    <div id="title">
-        <h1>三子棋游戏</h1>
-        <p id="tips">每人最多只能下三颗棋子，当下第四颗棋子时，最先那一颗棋子会消失。</p>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+    <div id="title" class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">三子棋游戏</h1>
+        <p id="tips" class="text-lg text-gray-600 mt-6">每人最多只能下三颗棋子，当下第四颗棋子时，最先那一颗棋子会消失。</p>
     </div>
-    <div id="board">
-        <div class="square" id="square0"></div>
-        <div class="square" id="square1"></div>
-        <div class="square" id="square2"></div>
-        <div class="square" id="square3"></div>
-        <div class="square" id="square4"></div>
-        <div class="square" id="square5"></div>
-        <div class="square" id="square6"></div>
-        <div class="square" id="square7"></div>
-        <div class="square" id="square8"></div>
+    <div id="board" class="grid grid-cols-3 gap-4">
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square0"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square1"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square2"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square3"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square4"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square5"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square6"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square7"></div>
+        <div class="square w-24 h-24 bg-white border-2 border-gray-300 flex items-center justify-center" id="square8"></div>
     </div>
-    <h2 id="message"></h2>
-    <div id="endGame">
-        <input type="button" value="重新开始" id="restartButton" onclick="restartGame()"/>
+    <h2 id="message" class="text-2xl text-gray-700 mt-6"></h2>
+    <div id="endGame" class="mt-4">
+        <input type="button" value="重新开始" id="restartButton" onclick="restartGame()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"/>
     </div>
     <script src="game.js"></script>
 </body>

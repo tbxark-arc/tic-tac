@@ -40,7 +40,7 @@ for (let i = 0; i < squares.length; i++) {
             if (checkWin(currentPlayer)) {
                 endMessage.textContent = `${currentPlayer} 赢了!`;
                 score[currentPlayer] = score[currentPlayer] ? score[currentPlayer] + 1 : 1;
-                tips.textContent = `❌: ${score[players[0]]} 🟢: ${score[players[1]]}`;
+                tips.textContent = `❌${score[players[0]]} : ${score[players[1]]} 🟢`;
                 disableBoard();
             } else {
                 currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
